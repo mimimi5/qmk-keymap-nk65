@@ -23,11 +23,15 @@ enum layers {
     _FN
 };
 
+enum custom_keycodes {
+  DISABLE_FORCE_IME_OFF = SAFE_RANGE
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_BASE] = LAYOUT_65_ansi( /* Base */
     KC_GESC,          KC_1,    KC_2,   KC_3,   KC_4,   KC_5,   KC_6,   KC_7,   KC_8,    KC_9,             KC_0,    KC_MINS,      KC_EQL,  KC_BSPC, TG(_MAC),\
     KC_TAB,           KC_Q,    KC_W,   KC_E,   KC_R,   KC_T,   KC_Y,   KC_U,   KC_I,    KC_O,             KC_P,    KC_LBRC,      KC_RBRC, KC_BSLS, KC_PGUP, \
-    LCTL_T(KC_LANG2), KC_A,    KC_S,   KC_D,   KC_F,   KC_G,   KC_H,   KC_J,   KC_K,    KC_L,             KC_SCLN, KC_QUOT,               KC_ENT,  KC_PGDN, \
+    LCTL_T(KC_LANG2), KC_A,    KC_S,   KC_D,   KC_F,   KC_G,   KC_H,   KC_J,   KC_K,    KC_L,             KC_SCLN, KC_QUOT,               KC_ENT,  DISABLE_FORCE_IME_OFF, \
     KC_LSFT,          KC_Z,    KC_X,   KC_C,   KC_V,   KC_B,   KC_N,   KC_M,   KC_COMM, KC_DOT,           KC_SLSH, RSFT_T(KC_GRV),        KC_UP,   MO(_FN), \
     MO(_VIM),         KC_LALT, KC_DEL,                 KC_SPC,                          RCTL_T(KC_LANG1), KC_RALT, KC_RGUI,      KC_LEFT, KC_DOWN, KC_RGHT),
 
@@ -53,6 +57,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TRNS, KC_TRNS, KC_TRNS,                   KC_TRNS,                            KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS),
 };
 
+const uint16_t PROGMEM force_ime_off_keycodes[] = {
+    KC_ESC, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_EQL,
+    KC_BSLS,
+    KC_SCLN, KC_QUOT,
+    KC_GRV
+};
+const size_t force_ime_off_keycodes_length = sizeof(force_ime_off_keycodes) / sizeof(force_ime_off_keycodes[0]);
+
+const uint16_t PROGMEM force_ime_off_shift_keycodes[] = {
+    KC_ESC, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINS, KC_EQL,
+    KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, KC_RBRC, KC_BSLS,
+    KC_A, KC_S, KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT,
+    KC_Z, KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH
+};
+const size_t force_ime_off_shift_keycodes_length = sizeof(force_ime_off_shift_keycodes) / sizeof(force_ime_off_shift_keycodes[0]);
+
+bool enable_force_ime_off = true;
+
 void matrix_init_user(void) {
   //user initialization
 }
@@ -61,8 +83,44 @@ void matrix_scan_user(void) {
   //user matrix
 }
 
+void process_record_force_ime_off(uint16_t keycode, keyrecord_t *record) {
+    bool force_ime_off = false;
+
+    if (0 < (get_mods() & MOD_MASK_SHIFT)) {
+        for (size_t i = 0; i < force_ime_off_shift_keycodes_length; ++i) {
+            if (keycode == force_ime_off_shift_keycodes[i]) {
+                force_ime_off = true;
+                break;
+            }
+        }
+    } else {
+        for (size_t i = 0; i < force_ime_off_keycodes_length; ++i) {
+            if (keycode == force_ime_off_keycodes[i]) {
+                force_ime_off = true;
+                break;
+            }
+        }
+    }
+
+    if (force_ime_off && record->event.pressed) {
+        uint8_t current_real_mods = get_mods();
+        clear_mods();
+        tap_code(KC_LANG2);
+        set_mods(current_real_mods);
+    }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  return true;
+    if (keycode == DISABLE_FORCE_IME_OFF) {
+        enable_force_ime_off = !record->event.pressed;
+        return true;
+    }
+
+    if (enable_force_ime_off) {
+        process_record_force_ime_off(keycode, record);
+    }
+
+    return true;
 }
 
 bool led_update_user(led_t led_state) {

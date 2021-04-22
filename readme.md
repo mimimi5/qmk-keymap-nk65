@@ -38,3 +38,15 @@ Windows用のレイヤーです。
 1. Fnレイヤー
 2. Vimレイヤー
 3. Macレイヤー
+
+## 強制IMEオフ
+
+<https://kbigwheel.hateblo.jp/entry/no-pain-with-japanese-input>を丸パクリして、カスタムキー`DISABLE_FORCE_IME_OFF`を押していない場合に下記文字を入力するとIMEオフキーを先行して入力するようにしています。
+
+* 数字
+* 大文字アルファベット
+* 下記**以外**の記号
+  * カンマ・ピリオド(句読点)
+  * ハイフン(長音)
+  * カギ括弧
+  * スラッシュ(中黒)
