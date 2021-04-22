@@ -14,6 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include QMK_KEYBOARD_H
+#include "drivers/issi/is31fl3733.h"
 
 enum layers {
     _BASE = 0,
@@ -62,4 +63,32 @@ void matrix_scan_user(void) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   return true;
+}
+
+bool led_update_user(led_t led_state) {
+    return false;
+}
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    if (layer_state_cmp(state, _FN)) {
+        IS31FL3733_set_color(7 + 64 - 1, 0, 255, 0);
+    } else {
+        IS31FL3733_set_color(7 + 64 - 1, 0, 0, 0);
+    }
+
+    uint8_t R = 0;
+    uint8_t G = 0;
+    uint8_t B = 0;
+
+    if (layer_state_cmp(state, _VIM)) {
+        R = 255;
+        B = 255;
+    }
+
+    if (layer_state_cmp(state, _MAC)) {
+        G = 255;
+    }
+
+    IS31FL3733_set_color(6 + 64 - 1, R, G, B);
+    return state;
 }
