@@ -24,7 +24,8 @@ enum layers {
 };
 
 enum custom_keycodes {
-  DISABLE_FORCE_IME_OFF = SAFE_RANGE
+  DISABLE_FORCE_IME_OFF = SAFE_RANGE,
+  VIM_UNDO
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -43,10 +44,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TRNS,          KC_TRNS, KC_TRNS,                   KC_TRNS,                            RGUI_T(KC_LANG1), KC_TRNS, KC_RCTL, KC_TRNS, KC_TRNS, KC_TRNS),
 
 [_VIM] = LAYOUT_65_ansi( /* Vim */
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,\
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_HOME, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,\
-    KC_TRNS, KC_END,  KC_TRNS, KC_TRNS, KC_PGDN, KC_TRNS, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_TRNS, KC_TRNS,          KC_TRNS, KC_TRNS,\
-    KC_TRNS, KC_DEL,  KC_TRNS, KC_TRNS, KC_TRNS, KC_PGUP, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,          KC_TRNS, KC_TRNS,\
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,\
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, VIM_UNDO, KC_HOME, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,\
+    KC_TRNS, KC_END,  KC_TRNS, KC_TRNS, KC_PGDN, KC_TRNS, KC_LEFT, KC_DOWN,  KC_UP,   KC_RGHT, KC_TRNS, KC_TRNS,          KC_TRNS, KC_TRNS,\
+    KC_TRNS, KC_TRNS, KC_DEL,  KC_TRNS, KC_TRNS, KC_PGUP, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,          KC_TRNS, KC_TRNS,\
     KC_TRNS, KC_TRNS, KC_TRNS,                   KC_TRNS,                            KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS),
 
 [_FN] = LAYOUT_65_ansi( /* FN */
@@ -114,6 +115,31 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (keycode == DISABLE_FORCE_IME_OFF) {
         enable_force_ime_off = !record->event.pressed;
         return true;
+    }
+
+    switch (keycode)
+    {
+    case DISABLE_FORCE_IME_OFF:
+        enable_force_ime_off = !record->event.pressed;
+        return true;
+    case VIM_UNDO:
+        if (layer_state_is(_MAC)) {
+            if (record->event.pressed) {
+                register_code16(G(KC_Z));
+            } else {
+                unregister_code16(G(KC_Z));
+            }
+        } else {
+            if (record->event.pressed) {
+                register_code16(C(KC_Z));
+            } else {
+                unregister_code16(C(KC_Z));
+            }
+        }
+
+        return false;
+    default:
+        break;
     }
 
     if (enable_force_ime_off) {
