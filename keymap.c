@@ -25,7 +25,9 @@ enum layers {
 
 enum custom_keycodes {
   DISABLE_FORCE_IME_OFF = SAFE_RANGE,
-  VIM_UNDO
+  VIM_UNDO,
+  VIM_WORD_END,
+  VIM_WORD_BACK
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -44,11 +46,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TRNS,          KC_TRNS, KC_TRNS,                   KC_TRNS,                            RGUI_T(KC_LANG1), KC_TRNS, KC_RCTL, KC_TRNS, KC_TRNS, KC_TRNS),
 
 [_VIM] = LAYOUT_65_ansi( /* Vim */
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,\
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, VIM_UNDO, KC_HOME, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,\
-    KC_TRNS, KC_END,  KC_TRNS, KC_TRNS, KC_PGDN, KC_TRNS, KC_LEFT, KC_DOWN,  KC_UP,   KC_RGHT, KC_TRNS, KC_TRNS,          KC_TRNS, KC_TRNS,\
-    KC_TRNS, KC_TRNS, KC_DEL,  KC_TRNS, KC_TRNS, KC_PGUP, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,          KC_TRNS, KC_TRNS,\
-    KC_TRNS, KC_TRNS, KC_TRNS,                   KC_TRNS,                            KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS),
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,      KC_TRNS, KC_TRNS,       KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,\
+    KC_TRNS, KC_TRNS, KC_TRNS, VIM_WORD_END, KC_TRNS, KC_TRNS,       KC_TRNS, VIM_UNDO, KC_HOME, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,\
+    KC_TRNS, KC_END,  KC_TRNS, KC_TRNS,      KC_TRNS, KC_TRNS,       KC_LEFT, KC_DOWN,  KC_UP,   KC_RGHT, KC_TRNS, KC_TRNS,          KC_TRNS, KC_TRNS,\
+    KC_TRNS, KC_TRNS, KC_DEL,  KC_TRNS,      KC_TRNS, VIM_WORD_BACK, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,          KC_TRNS, KC_TRNS,\
+    KC_TRNS, KC_TRNS, KC_TRNS,                        KC_TRNS,                                   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS),
 
 [_FN] = LAYOUT_65_ansi( /* FN */
     KC_GRV,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_DEL,  KC_TRNS,\
@@ -111,6 +113,24 @@ void process_record_force_ime_off(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
+bool register_and_unregister_code16(uint16_t mac_keycode, uint16_t keycode, keyrecord_t *record) {
+    if (layer_state_is(_MAC)) {
+        if (record->event.pressed) {
+            register_code16(mac_keycode);
+        } else {
+            unregister_code16(mac_keycode);
+        }
+    } else {
+        if (record->event.pressed) {
+            register_code16(keycode);
+        } else {
+            unregister_code16(keycode);
+        }
+    }
+
+    return false;
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (keycode == DISABLE_FORCE_IME_OFF) {
         enable_force_ime_off = !record->event.pressed;
@@ -123,21 +143,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         enable_force_ime_off = !record->event.pressed;
         return true;
     case VIM_UNDO:
-        if (layer_state_is(_MAC)) {
-            if (record->event.pressed) {
-                register_code16(G(KC_Z));
-            } else {
-                unregister_code16(G(KC_Z));
-            }
-        } else {
-            if (record->event.pressed) {
-                register_code16(C(KC_Z));
-            } else {
-                unregister_code16(C(KC_Z));
-            }
-        }
-
-        return false;
+        return register_and_unregister_code16(G(KC_Z), C(KC_Z), record);
+    case VIM_WORD_END:
+        return register_and_unregister_code16(A(KC_RGHT), C(KC_RGHT), record);
+    case VIM_WORD_BACK:
+        return register_and_unregister_code16(A(KC_LEFT), C(KC_LEFT), record);
     default:
         break;
     }
