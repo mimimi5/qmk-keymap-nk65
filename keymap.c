@@ -49,11 +49,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TRNS,                 KC_TRNS, KC_TRNS,                KC_TRNS,                         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS),
 
 [_JP_SHIFT] = LAYOUT_65_ansi( /* 106/109 Shift */
-    KC_TRNS, JP_EXLM, JP_AT,   JP_HASH, JP_DLR,  JP_PERC, JP_CIRC, JP_AMPR, JP_ASTR, JP_LPRN, JP_RPRN, JP_UNDS, JP_PLUS, KC_TRNS, KC_TRNS,\
-    KC_TRNS, S(JP_Q), S(JP_W), S(JP_E), S(JP_R), S(JP_T), S(JP_Y), S(JP_U), S(JP_I), S(JP_O), S(JP_P), JP_LCBR, JP_RCBR, JP_PIPE, KC_TRNS,\
-    KC_TRNS, S(JP_A), S(JP_S), S(JP_D), S(JP_F), S(JP_G), S(JP_H), S(JP_J), S(JP_K), S(JP_L), JP_COLN, JP_DQUO,          KC_TRNS, KC_TRNS,\
-    KC_TRNS, S(JP_Z), S(JP_X), S(JP_C), S(JP_V), S(JP_B), S(JP_N), S(JP_M), JP_LABK, JP_RABK, JP_QUES, JP_TILD,          KC_TRNS, KC_TRNS,\
-    KC_TRNS, KC_TRNS, KC_TRNS,                   KC_TRNS,                            KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS),
+    KC_TRNS,   JP_EXLM,   JP_AT,      JP_HASH, JP_DLR,  JP_PERC,   JP_CIRC, JP_AMPR, JP_ASTR, JP_LPRN,    JP_RPRN,    JP_UNDS,    JP_PLUS,    S(KC_BSPC), KC_TRNS,\
+    S(KC_TAB), S(JP_Q),   S(JP_W),    S(JP_E), S(JP_R), S(JP_T),   S(JP_Y), S(JP_U), S(JP_I), S(JP_O),    S(JP_P),    JP_LCBR,    JP_RCBR,    JP_PIPE,    KC_TRNS,\
+    KC_TRNS,   S(JP_A),   S(JP_S),    S(JP_D), S(JP_F), S(JP_G),   S(JP_H), S(JP_J), S(JP_K), S(JP_L),    JP_COLN,    JP_DQUO,                S(KC_ENT),  KC_TRNS,\
+    KC_TRNS,   S(JP_Z),   S(JP_X),    S(JP_C), S(JP_V), S(JP_B),   S(JP_N), S(JP_M), JP_LABK, JP_RABK,    JP_QUES,    JP_TILD,                S(KC_UP),   KC_TRNS,\
+    KC_TRNS,   S(KC_LALT), S(KC_DEL),                   S(KC_SPC),                            S(KC_RCTL), S(KC_RGUI), S(KC_RGUI), S(KC_LEFT), S(KC_DOWN), S(KC_RGHT)),
 
 [_MAC] = LAYOUT_65_ansi( /* Mac */
     KC_TRNS,          KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,\
