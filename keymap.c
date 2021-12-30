@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include QMK_KEYBOARD_H
-#include "drivers/issi/is31fl3733.h"
+#include "drivers/led/issi/is31fl3733.h"
 #include "keymap_jp.h"
 
 enum layers {
@@ -35,11 +35,11 @@ enum custom_keycodes {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_BASE] = LAYOUT_65_ansi( /* Base */
-    KC_GESC,          KC_1,    KC_2,   KC_3,   KC_4,   KC_5,   KC_6,   KC_7,   KC_8,    KC_9,    KC_0,    KC_MINS,      KC_EQL,  KC_BSPC, TG(_MAC),\
-    KC_TAB,           KC_Q,    KC_W,   KC_E,   KC_R,   KC_T,   KC_Y,   KC_U,   KC_I,    KC_O,    KC_P,    KC_LBRC,      KC_RBRC, KC_BSLS, TG(_JP), \
-    LCTL_T(KC_LANG2), KC_A,    KC_S,   KC_D,   KC_F,   KC_G,   KC_H,   KC_J,   KC_K,    KC_L,    KC_SCLN, KC_QUOT,               KC_ENT,  DISABLE_FORCE_IME_OFF, \
-    LSFT_T(KC_LANG1), KC_Z,    KC_X,   KC_C,   KC_V,   KC_B,   KC_N,   KC_M,   KC_COMM, KC_DOT,  KC_SLSH, RSFT_T(KC_GRV),        KC_UP,   MO(_FN), \
-    MO(_VIM),         KC_LALT, KC_DEL,                 KC_SPC,                          KC_RCTL, KC_RALT, KC_RGUI,      KC_LEFT, KC_DOWN, KC_RGHT),
+    KC_GESC,          KC_1,    KC_2,   KC_3,   KC_4,   KC_5,   KC_6,   KC_7,   KC_8,    KC_9,   KC_0,    KC_MINS,      KC_EQL,  KC_BSPC, TG(_MAC),\
+    KC_TAB,           KC_Q,    KC_W,   KC_E,   KC_R,   KC_T,   KC_Y,   KC_U,   KC_I,    KC_O,   KC_P,    KC_LBRC,      KC_RBRC, KC_BSLS, TG(_JP), \
+    LCTL_T(KC_LANG2), KC_A,    KC_S,   KC_D,   KC_F,   KC_G,   KC_H,   KC_J,   KC_K,    KC_L,   KC_SCLN, KC_QUOT,               KC_ENT,  DISABLE_FORCE_IME_OFF, \
+    LSFT_T(KC_LANG1), KC_Z,    KC_X,   KC_C,   KC_V,   KC_B,   KC_N,   KC_M,   KC_COMM, KC_DOT, KC_SLSH, RSFT_T(KC_GRV),        KC_UP,   MO(_FN), \
+    MO(_VIM),         KC_LALT, KC_DEL,                 KC_SPC,                          KC_ENT, KC_RALT, KC_RGUI,      KC_LEFT, KC_DOWN, KC_RGHT),
 
 [_JP] = LAYOUT_65_ansi( /* 106/109 */
     KC_TRNS,                 JP_1,    JP_2,   JP_3,   JP_4,   JP_5,   JP_6,   JP_7,   JP_8,    JP_9,    JP_0,    JP_MINS, JP_EQL,  KC_TRNS, KC_TRNS,\
@@ -49,18 +49,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TRNS,                 KC_TRNS, KC_TRNS,                KC_TRNS,                         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS),
 
 [_JP_SHIFT] = LAYOUT_65_ansi( /* 106/109 Shift */
-    KC_TRNS,   JP_EXLM,   JP_AT,      JP_HASH, JP_DLR,  JP_PERC,   JP_CIRC, JP_AMPR, JP_ASTR, JP_LPRN,    JP_RPRN,    JP_UNDS,    JP_PLUS,    S(KC_BSPC), KC_TRNS,\
-    S(KC_TAB), S(JP_Q),   S(JP_W),    S(JP_E), S(JP_R), S(JP_T),   S(JP_Y), S(JP_U), S(JP_I), S(JP_O),    S(JP_P),    JP_LCBR,    JP_RCBR,    JP_PIPE,    KC_TRNS,\
-    KC_TRNS,   S(JP_A),   S(JP_S),    S(JP_D), S(JP_F), S(JP_G),   S(JP_H), S(JP_J), S(JP_K), S(JP_L),    JP_COLN,    JP_DQUO,                S(KC_ENT),  KC_TRNS,\
-    KC_TRNS,   S(JP_Z),   S(JP_X),    S(JP_C), S(JP_V), S(JP_B),   S(JP_N), S(JP_M), JP_LABK, JP_RABK,    JP_QUES,    JP_TILD,                S(KC_UP),   KC_TRNS,\
-    KC_TRNS,   S(KC_LALT), S(KC_DEL),                   S(KC_SPC),                            S(KC_RCTL), S(KC_RGUI), S(KC_RGUI), S(KC_LEFT), S(KC_DOWN), S(KC_RGHT)),
+    KC_TRNS,   JP_EXLM,   JP_AT,      JP_HASH, JP_DLR,  JP_PERC,   JP_CIRC, JP_AMPR, JP_ASTR, JP_LPRN,   JP_RPRN,    JP_UNDS,    JP_PLUS,    S(KC_BSPC), KC_TRNS,\
+    S(KC_TAB), S(JP_Q),   S(JP_W),    S(JP_E), S(JP_R), S(JP_T),   S(JP_Y), S(JP_U), S(JP_I), S(JP_O),   S(JP_P),    JP_LCBR,    JP_RCBR,    JP_PIPE,    KC_TRNS,\
+    KC_TRNS,   S(JP_A),   S(JP_S),    S(JP_D), S(JP_F), S(JP_G),   S(JP_H), S(JP_J), S(JP_K), S(JP_L),   JP_COLN,    JP_DQUO,                S(KC_ENT),  KC_TRNS,\
+    KC_TRNS,   S(JP_Z),   S(JP_X),    S(JP_C), S(JP_V), S(JP_B),   S(JP_N), S(JP_M), JP_LABK, JP_RABK,   JP_QUES,    JP_TILD,                S(KC_UP),   KC_TRNS,\
+    KC_TRNS,   S(KC_LALT), S(KC_DEL),                   S(KC_SPC),                            S(KC_ENT), S(KC_RGUI), S(KC_RGUI), S(KC_LEFT), S(KC_DOWN), S(KC_RGHT)),
 
 [_MAC] = LAYOUT_65_ansi( /* Mac */
     KC_TRNS,          KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,\
     KC_TRNS,          KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,\
     LGUI_T(KC_LANG2), KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,          KC_TRNS, KC_TRNS,\
     KC_TRNS,          KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,          KC_TRNS, KC_TRNS,\
-    KC_TRNS,          KC_TRNS, KC_TRNS,                   KC_TRNS,                            KC_RGUI, KC_TRNS, KC_RCTL, KC_TRNS, KC_TRNS, KC_TRNS),
+    KC_TRNS,          KC_TRNS, KC_TRNS,                   KC_TRNS,                            KC_TRNS, KC_TRNS, KC_RCTL, KC_TRNS, KC_TRNS, KC_TRNS),
 
 [_VIM] = LAYOUT_65_ansi( /* Vim */
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,       KC_TRNS,  KC_TRNS, KC_TRNS,      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,\
