@@ -124,13 +124,8 @@ const size_t force_ime_off_shift_keycodes_length = sizeof(force_ime_off_shift_ke
 
 bool enable_force_ime_off = true;
 
-void matrix_init_user(void) {
-  //user initialization
+void keyboard_post_init_user(void) {
   key_override_off();
-}
-
-void matrix_scan_user(void) {
-  //user matrix
 }
 
 void process_record_force_ime_off(uint16_t keycode, keyrecord_t *record) {
